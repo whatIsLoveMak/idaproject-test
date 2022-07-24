@@ -5,7 +5,11 @@
         <div class="title__row">
           <div class="title"><h1>Добавление товара</h1></div>
           <div class="select">
-            <t-select v-model="selectedSort" :options="sortOptions" />
+            <t-select
+              @change="changeSort"
+              :options="'default'"
+              :modelValue="selectedSort"
+            />
           </div>
         </div>
         <div class="section__row">
@@ -79,33 +83,31 @@ export default {
       items: [
         {
           key: 1,
-          title: 'Наименование товара',
+          title: 'Наименование товара2',
           desc: 'Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк',
-          price: '10 000 руб.',
+          price: 10000,
+          currensy: ' руб.',
           img: 'https://store.donanimhaber.com/56/8c/a2/568ca250412f91d354e278d0dd4597b5.jpg',
         },
         {
           key: 2,
-          title: 'Наименование товара',
+          title: 'аименование товара1sAS',
           desc: 'Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк',
-          price: '10 000 руб.',
+          price: 12000,
+          currensy: ' руб.',
           img: 'https://store.donanimhaber.com/56/8c/a2/568ca250412f91d354e278d0dd4597b5.jpg',
         },
       ],
       newItem: {},
-      selectedSort: '',
-      sortOptions: [
-        { value: 'min price', name: 'По цене min' },
-        { value: 'max price', name: 'По цене max' },
-        { value: 'title', name: 'По наименованию' },
-      ],
+      selectedSort: 'По умолчанию',
     }
   },
   methods: {
     insertItem() {
       this.newItem.title
       this.newItem.desc
-      this.newItem.price + '.руб'
+      this.newItem.price
+      this.newItem.currensy = ' руб.'
       this.newItem.img
       this.newItem.key = Date.now()
       this.items.push(this.newItem)
@@ -114,6 +116,21 @@ export default {
     },
     deleteItem(key) {
       this.items = this.items.filter((e) => e.key !== key)
+    },
+    changeSort(elem) {
+      if (elem === 'max price') {
+        this.items.sort(function (a, b) {
+          return b.price - a.price
+        })
+      } else if (elem === 'min price') {
+        this.items.sort(function (a, b) {
+          return a.price - b.price
+        })
+      } else if (elem === 'title') {
+        this.items.sort(function (a, b) {
+          return a.title.localeCompare(b.title)
+        })
+      }
     },
   },
 }
@@ -274,8 +291,12 @@ h6 {
   transition: all 1s ease;
 }
 .list-enter-from,
-.list-leave-to {
+.list-leave-to,
+.list-enter {
   opacity: 0;
   transform: translateY(30px);
+}
+.list-move {
+  transition: transform 1s;
 }
 </style>

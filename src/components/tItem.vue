@@ -7,7 +7,7 @@
       <div class="item-text">
         <div class="item-text__title">{{ item.title }}</div>
         <div class="item-text__desc">{{ item.desc }}</div>
-        <div class="item-text__price">{{ item.price }}</div>
+        <div class="item-text__price">{{ item.price + item.currensy}}</div>
       </div>
     </a>
     <div @click="deleteItem" class="item-delete"><img src="../../src/assets/images/delete.png" alt=""></div>

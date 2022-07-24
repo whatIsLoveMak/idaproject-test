@@ -1,8 +1,8 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <select v-model="modelValue" :class="className" @change="changeOption">
-    <option  value="По умолчанию" disabled>По умолчанию</option>
-    <option v-for="option in options" :key="option.value" :value="option.value">{{option.name}}</option>
+    <option  value="default" selected disabled>По умолчанию</option>
+    <option v-for="option in getSortItems" :key="option.value" :value="option.value">{{option.name}}</option>
   </select>
 </template>
 <!-- eslint-disable prettier/prettier -->
@@ -12,27 +12,36 @@ export default {
   components: {},
   data() {
     return {
-       
+      modelValue: 'default',
+      default: [
+        { value: 'min price', name: 'По цене min' },
+        { value: 'max price', name: 'По цене max' },
+        { value: 'title', name: 'По наименованию' },
+      ],
     }
   },
   props: {
+    options: {
+        type: [String, Array],
+    },
     className: {
         type: String,
         default: 'select',
     },
-    modelValue: {
-        type: String
-    },
-    options: {
-        type: Array,
-        default: () => []
-    },
   },
   methods: {
     changeOption(event) {
-        this.$emit('update:modelValue', event.target.value)
+        this.$emit('change', event.target.value)
     },
   },
+  computed: {
+    getSortItems() {
+        if(this.options === 'default'){
+            return this.default
+        }
+        return this.options
+    },
+  }
 }
 </script>
 <style lang="scss" scoped></style>

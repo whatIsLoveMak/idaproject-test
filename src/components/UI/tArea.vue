@@ -59,6 +59,7 @@ export default {
       background: #FFFEFB;
       box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
       border-radius: 4px;
+      resize: none;
     }
     .error-message {
       font-size: 8px;
