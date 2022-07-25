@@ -21,7 +21,7 @@
                 :errorInner="'Название товара не введено'"
                 :type="'text'"
                 v-model.trim="newItem.title"
-                @blur.native="checkTitle"
+                :error="checkTitle"
               />
               <t-area
                 :innerLabel="'Описание товара'"
@@ -34,18 +34,21 @@
                 :errorInner="'Ссылка не введена или введена неправильно'"
                 :type="'text'"
                 v-model.trim="newItem.img"
+                :error="checkLink"
               />
               <t-input
                 :innerLabel="'Цена товара'"
                 :placeholder="'Введите цену'"
                 :errorInner="'Стоимость не введена или введена неверно'"
-                :type="'number'"
+                :type="'text'"
                 v-model.trim="newItem.price"
+                :error="checkPrice"
+                @input="priceMask"
               />
               <t-button
                 @click.native="insertItem"
                 :innerText="'Добавить товар'"
-                :class="{ disabled: !disabled }"
+                :class="{ disabled: enableButton }"
               />
             </div>
           </div>
@@ -104,7 +107,6 @@ export default {
       selectedSort: 'По умолчанию',
       disabled: false,
       count: 0,
-      error: false,
     }
   },
   methods: {
@@ -138,8 +140,42 @@ export default {
         })
       }
     },
+    priceMask() {
+      this.newItem.price = this.newItem.price.replace(/\D/g, '')
+      let reversedPrice = this.newItem.price.split('').reverse()
+      for (let i = 0; i < reversedPrice.length; i += 3) {
+        reversedPrice[i] = reversedPrice[i] + ' '
+      }
+      this.newItem.price = reversedPrice.reverse().join('')
+    },
+  },
+  computed: {
     checkTitle() {
-      console.log('title')
+      if (this.newItem.title !== '') {
+        return false
+      }
+      return true
+    },
+    checkLink() {
+      let str = this.newItem.img
+      if (str === undefined) {
+        return false
+      } else if (str.indexOf('https://', 0) !== -1) {
+        return false
+      }
+      return true
+    },
+    checkPrice() {
+      if (this.newItem.price !== '') {
+        return false
+      }
+      return true
+    },
+    enableButton() {
+      if (!this.checkPrice && !this.checkTitle && this.checkLink) {
+        return console.log('no')
+      }
+      return console.log('yes')
     },
   },
   mounted() {
