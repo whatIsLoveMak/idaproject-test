@@ -48,7 +48,7 @@
               <t-button
                 @click.native="insertItem"
                 :innerText="'Добавить товар'"
-                :class="{ disabled: enableButton }"
+                :class="{ disabled: !enableButton }"
               />
             </div>
           </div>
@@ -103,10 +103,10 @@ export default {
           img: 'https://store.donanimhaber.com/56/8c/a2/568ca250412f91d354e278d0dd4597b5.jpg',
         },
       ],
-      newItem: {},
+      newItem: {
+        img: '',
+      },
       selectedSort: 'По умолчанию',
-      disabled: false,
-      count: 0,
     }
   },
   methods: {
@@ -158,12 +158,13 @@ export default {
     },
     checkLink() {
       let str = this.newItem.img
-      if (str === undefined) {
-        return false
-      } else if (str.indexOf('https://', 0) !== -1) {
-        return false
+      if (str !== '') {
+        if (str.indexOf('https://', 0) !== -1) {
+          return false
+        }
+        return true
       }
-      return true
+      return false
     },
     checkPrice() {
       if (this.newItem.price !== '') {
@@ -172,10 +173,15 @@ export default {
       return true
     },
     enableButton() {
-      if (!this.checkPrice && !this.checkTitle && this.checkLink) {
-        return console.log('no')
+      if (
+        !this.checkPrice &&
+        !this.checkTitle &&
+        !this.checkLink &&
+        this.newItem.img !== ''
+      ) {
+        return true
       }
-      return console.log('yes')
+      return false
     },
   },
   mounted() {
