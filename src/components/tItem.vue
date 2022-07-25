@@ -2,14 +2,13 @@
 
 <template>
   <div class="item">
-    <a href="">
+    <a href=""></a>
       <div class="item-img"><img :src="item.img" alt="" /></div>
       <div class="item-text">
         <div class="item-text__title">{{ item.title }}</div>
         <div class="item-text__desc">{{ item.desc }}</div>
         <div class="item-text__price">{{ item.price + item.currensy}}</div>
       </div>
-    </a>
     <div @click="deleteItem" class="item-delete"><img src="../../src/assets/images/delete.png" alt=""></div>
   </div>
 </template>
@@ -41,6 +40,14 @@ export default {
   border-radius: 4px;
   box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.04), 0px 6px 10px rgba(0, 0, 0, 0.02);
   position: relative;
+  & > a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
   &-img {
     position: relative;
     padding-top: 61%;

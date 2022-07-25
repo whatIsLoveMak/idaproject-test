@@ -4,7 +4,7 @@
     <label for="">
       <span>{{innerLabel}}</span>
       <input :class="className" :placeholder="placeholder" :type="type" :value="value" @input="input">
-      <div class="error-message">{{error}}</div>
+      <div v-show="error" class="error-message">{{errorInner}}</div>
     </label>
 </template>
 <!-- eslint-disable prettier/prettier -->
@@ -36,10 +36,14 @@ export default {
         type: [String, Number],
         default: '',
     },
-    error: {
+    errorInner: {
          type: [String, Number],
         default: '',
-    }
+    },
+    error: {
+      type: Boolean,
+      required: false,
+    },
   },
   methods: {
     input(event) {

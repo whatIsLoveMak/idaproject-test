@@ -18,9 +18,10 @@
               <t-input
                 :innerLabel="'Наименование товара'"
                 :placeholder="'Введите наименование товара'"
-                :error="'Название товара не введено'"
+                :errorInner="'Название товара не введено'"
                 :type="'text'"
-                v-model="newItem.title"
+                v-model.trim="newItem.title"
+                @blur.native="checkTitle"
               />
               <t-area
                 :innerLabel="'Описание товара'"
@@ -30,20 +31,21 @@
               <t-input
                 :innerLabel="'Ссылка на изображение товара'"
                 :placeholder="'Введите ссылку'"
-                :error="'Ссылка не введена или введена неправильно'"
+                :errorInner="'Ссылка не введена или введена неправильно'"
                 :type="'text'"
-                v-model="newItem.img"
+                v-model.trim="newItem.img"
               />
               <t-input
                 :innerLabel="'Цена товара'"
                 :placeholder="'Введите цену'"
-                :error="'Стоимость не введена или введена неверно'"
+                :errorInner="'Стоимость не введена или введена неверно'"
                 :type="'number'"
-                v-model="newItem.price"
+                v-model.trim="newItem.price"
               />
               <t-button
                 @click.native="insertItem"
                 :innerText="'Добавить товар'"
+                :class="{ disabled: !disabled }"
               />
             </div>
           </div>
@@ -100,6 +102,9 @@ export default {
       ],
       newItem: {},
       selectedSort: 'По умолчанию',
+      disabled: false,
+      count: 0,
+      error: false,
     }
   },
   methods: {
@@ -112,6 +117,7 @@ export default {
       this.newItem.key = Date.now()
       this.items.push(this.newItem)
       this.newItem = {}
+      localStorage.setItem('item', JSON.stringify(this.items))
       console.log(this.items)
     },
     deleteItem(key) {
@@ -132,6 +138,15 @@ export default {
         })
       }
     },
+    checkTitle() {
+      console.log('title')
+    },
+  },
+  mounted() {
+    const itemsData = localStorage.getItem('item')
+    if (itemsData) {
+      this.items = JSON.parse(itemsData)
+    }
   },
 }
 </script>
