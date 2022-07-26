@@ -3,7 +3,7 @@
 <template>
     <label for="">
       <span>{{innerLabel}}</span>
-      <input :class="className" :placeholder="placeholder" :type="type" :value="value" @input="input">
+      <input :class="[{border_error: error},className]" :placeholder="placeholder" :type="type" :value="value" @input="input">
       <div v-show="error" class="error-message">{{errorInner}}</div>
     </label>
 </template>
@@ -83,6 +83,7 @@ export default {
       box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
       border-radius: 4px;
       margin-bottom: 4px;
+      border: 1px solid transparent;
       &::placeholder {
         font-size: 12px;
         line-height: 15px;
@@ -93,5 +94,8 @@ export default {
       font-size: 8px;
       line-height: 10px;
       color: #FF8484;
+    }
+    .border_error {
+      border: 1px solid #FF8484;
     }
 </style>

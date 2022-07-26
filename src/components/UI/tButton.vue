@@ -39,12 +39,13 @@ button {
 .button.disabled {
   color: #B4B4B4;
   background: #EEEEEE;
-  border: 1px solid #FF8484;
+  border: 1px solid transparent;
   pointer-events: none;
 }
 .button {
-  color: black;
+  color: #EEEEEE;
   background: white;
-  border: 1px solid #30b830;
+  border: 1px solid #7BAE73;
+  background: #7BAE73;
 }
 </style>

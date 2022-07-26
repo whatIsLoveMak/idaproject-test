@@ -40,6 +40,9 @@ export default {
   border-radius: 4px;
   box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.04), 0px 6px 10px rgba(0, 0, 0, 0.02);
   position: relative;
+  &:hover .item-delete{
+    opacity: 1;
+  }
   & > a {
     position: absolute;
     top: 0;
@@ -88,6 +91,9 @@ export default {
   }
   &-delete {
     position: absolute;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    opacity: 0;
     right: -8px;
     top: -8px;
     width: 32px;
@@ -105,4 +111,5 @@ export default {
     }
   }
 }
+
 </style>

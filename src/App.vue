@@ -13,47 +13,9 @@
           </div>
         </div>
         <div class="section__row">
-          <div class="section__row-form">
-            <div class="form-container">
-              <t-input
-                :innerLabel="'Наименование товара'"
-                :placeholder="'Введите наименование товара'"
-                :errorInner="'Название товара не введено'"
-                :type="'text'"
-                v-model.trim="newItem.title"
-                :error="checkTitle"
-              />
-              <t-area
-                :innerLabel="'Описание товара'"
-                :placeholder="'Введите описание товара'"
-                v-model="newItem.desc"
-              />
-              <t-input
-                :innerLabel="'Ссылка на изображение товара'"
-                :placeholder="'Введите ссылку'"
-                :errorInner="'Ссылка не введена или введена неправильно'"
-                :type="'text'"
-                v-model.trim="newItem.img"
-                :error="checkLink"
-              />
-              <t-input
-                :innerLabel="'Цена товара'"
-                :placeholder="'Введите цену'"
-                :errorInner="'Стоимость не введена или введена неверно'"
-                :type="'text'"
-                v-model.trim="newItem.price"
-                :error="checkPrice"
-                @input="priceMask"
-              />
-              <t-button
-                @click.native="insertItem"
-                :innerText="'Добавить товар'"
-                :class="{ disabled: !enableButton }"
-              />
-            </div>
-          </div>
+          <t-form @newItem="pushItem" />
           <div class="section__row-items">
-            <transition-group name="list">
+            <transition-group v-if="items.length > 0" name="list">
               <t-item
                 @deleteItem="deleteItem"
                 :item="item"
@@ -61,6 +23,7 @@
                 :key="item.key"
               />
             </transition-group>
+            <h1 v-else>Список постов пуст</h1>
           </div>
         </div>
       </div>
@@ -70,18 +33,14 @@
 
 <script>
 import TItem from './components/tItem.vue'
-import TInput from './components/UI/tInput.vue'
-import TArea from './components/UI/tArea.vue'
-import TButton from './components/UI/tButton.vue'
 import TSelect from './components/UI/tSelect.vue'
+import TForm from './components/tForm.vue'
 export default {
   name: 'App',
   components: {
     TItem,
-    TInput,
-    TArea,
-    TButton,
     TSelect,
+    TForm,
   },
   data() {
     return {
@@ -103,27 +62,17 @@ export default {
           img: 'https://store.donanimhaber.com/56/8c/a2/568ca250412f91d354e278d0dd4597b5.jpg',
         },
       ],
-      newItem: {
-        img: '',
-      },
       selectedSort: 'По умолчанию',
     }
   },
   methods: {
-    insertItem() {
-      this.newItem.title
-      this.newItem.desc
-      this.newItem.price
-      this.newItem.currensy = ' руб.'
-      this.newItem.img
-      this.newItem.key = Date.now()
-      this.items.push(this.newItem)
-      this.newItem = {}
+    pushItem(elem) {
+      this.items.push(elem)
       localStorage.setItem('item', JSON.stringify(this.items))
-      console.log(this.items)
     },
     deleteItem(key) {
       this.items = this.items.filter((e) => e.key !== key)
+      localStorage.setItem('item', JSON.stringify(this.items))
     },
     changeSort(elem) {
       if (elem === 'max price') {
@@ -139,49 +88,6 @@ export default {
           return a.title.localeCompare(b.title)
         })
       }
-    },
-    priceMask() {
-      this.newItem.price = this.newItem.price.replace(/\D/g, '')
-      let reversedPrice = this.newItem.price.split('').reverse()
-      for (let i = 0; i < reversedPrice.length; i += 3) {
-        reversedPrice[i] = reversedPrice[i] + ' '
-      }
-      this.newItem.price = reversedPrice.reverse().join('')
-    },
-  },
-  computed: {
-    checkTitle() {
-      if (this.newItem.title !== '') {
-        return false
-      }
-      return true
-    },
-    checkLink() {
-      let str = this.newItem.img
-      if (str !== '') {
-        if (str.indexOf('https://', 0) !== -1) {
-          return false
-        }
-        return true
-      }
-      return false
-    },
-    checkPrice() {
-      if (this.newItem.price !== '') {
-        return false
-      }
-      return true
-    },
-    enableButton() {
-      if (
-        !this.checkPrice &&
-        !this.checkTitle &&
-        !this.checkLink &&
-        this.newItem.img !== ''
-      ) {
-        return true
-      }
-      return false
     },
   },
   mounted() {
@@ -286,15 +192,8 @@ h6 {
   @media (max-width: 768px) {
     flex-direction: column;
   }
-  &-form {
-    max-width: 25%;
+  &-items {
     width: 100%;
-    @media (max-width: 1024px) {
-      max-width: 33%;
-    }
-    @media (max-width: 768px) {
-      max-width: 100%;
-    }
   }
   &-items > span {
     display: grid;
